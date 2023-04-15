@@ -12,6 +12,17 @@ type cartUseCase struct {
 	cartRepo repository.CartRepository
 }
 
+// GetCart implements interfaces.CartUseCase
+func (c *cartUseCase) GetCart(ctx context.Context, cartId int64) ([]domain.CartItem, error) {
+	cartItems, err := c.cartRepo.GetCart(ctx, cartId)
+	return cartItems, err
+}
+
+// RemoveProductFromCart implements interfaces.CartUseCase
+func (c *cartUseCase) RemoveProductFromCart(ctx context.Context, productId int64) error {
+	return c.cartRepo.RemoveProductFromCart(ctx, productId)
+}
+
 // AddCartitemForUser implements interfaces.CartUseCase
 func (c *cartUseCase) AddCartitemForUser(ctx context.Context, cartItem domain.CartItem) (int64, error) {
 	id, err := c.cartRepo.AddCartitemForUser(ctx, cartItem)

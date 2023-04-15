@@ -8,7 +8,7 @@ type Cart struct {
 type CartItem struct {
 	Id         int64 `json:"-" gorm:"primaryKey;autoIncrement:true;unique"`
 	Cart_id    int64 `json:"-" `
-	Cart       *Cart  `json:"-" gorm:"foreignKey:Cart_id;references:Id"`
+	Cart       *Cart `json:"-" gorm:"foreignKey:Cart_id;references:Id"`
 	Product_id int64 `json:"productid"`
-	Quantity   int    `json:"quantity"`
+	Quantity   int64 `json:"quantity"`
 }

@@ -13,6 +13,48 @@ type CartService struct {
 	cartUseCase usecase.CartUseCase
 }
 
+func (c *CartService) GetCart(ctx context.Context, req *pb.GetCartRequest) (*pb.GetCartResponse, error) {
+	cartId := req.CartId
+	cartItems, err := c.cartUseCase.GetCart(ctx, cartId)
+	if err != nil {
+		return &pb.GetCartResponse{
+			Status: http.StatusUnprocessableEntity,
+			Error:  err.Error(),
+		}, err
+	}
+	var pbCartItems []*pb.CartItem
+	for _, c := range cartItems {
+		pbCartItems = append(pbCartItems, &pb.CartItem{
+			Id:        c.Id,
+			CartId:    c.Cart_id,
+			ProductId: c.Product_id,
+			Quantity:  c.Quantity,
+		})
+	}
+
+	return &pb.GetCartResponse{
+		Status:   http.StatusOK,
+		Cartlist: pbCartItems,
+	}, nil
+
+}
+
+func (c *CartService) RemoveProductFromCart(ctx context.Context, req *pb.RemoveProductFromCartRequest) (*pb.RemoveProductFromCartResponse, error) {
+	productId := req.ProductId
+	err := c.cartUseCase.RemoveProductFromCart(ctx, productId)
+	if err != nil {
+		return &pb.RemoveProductFromCartResponse{
+			Status: http.StatusUnprocessableEntity,
+			Error:  err.Error(),
+		}, err
+	}
+
+	return &pb.RemoveProductFromCartResponse{
+		Status: http.StatusOK,
+	}, nil
+
+}
+
 func (c *CartService) AddProductToCart(ctx context.Context, req *pb.AddProductToCartRequest) (*pb.AddProductToCartResponse, error) {
 	userId := req.UserId
 
@@ -27,7 +69,7 @@ func (c *CartService) AddProductToCart(ctx context.Context, req *pb.AddProductTo
 	AddProduct := domain.CartItem{
 		Cart_id:    id,
 		Product_id: req.ProductId,
-		Quantity:   int(req.Quantity),
+		Quantity:   req.Quantity,
 	}
 	id, err = c.cartUseCase.AddCartitemForUser(ctx, AddProduct)
 	if err != nil {

@@ -26,7 +26,7 @@ message AddProductToCartResponse {
 // AddProductToCart
 
 message RemoveProductFromCartRequest {
-    int64 CartItemId =1 ;
+    int64 ProductId =1 ;
 }
 
 message RemoveProductFromCartResponse {
@@ -37,7 +37,7 @@ message RemoveProductFromCartResponse {
 // GetCart
 
 message GetCartRequest {
-    int64 ProductId =1 ;
+    int64 CartId =1 ;
     int64 Quantity =2 ;
 }
 
