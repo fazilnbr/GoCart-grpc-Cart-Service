@@ -10,5 +10,5 @@ type CartUseCase interface {
 	CheckorCreatecart(ctx context.Context, userId int64) (int64, error)
 	AddCartitemForUser(ctx context.Context, cartItem domain.CartItem) (int64, error)
 	RemoveProductFromCart(ctx context.Context, productId int64) error
-	GetCart(ctx context.Context, cartId int64) ([]domain.CartItem, error)
+	GetCart(ctx context.Context, userId int64) ([]domain.CartItem, error)
 }

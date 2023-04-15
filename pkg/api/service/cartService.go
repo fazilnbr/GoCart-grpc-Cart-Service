@@ -14,8 +14,8 @@ type CartService struct {
 }
 
 func (c *CartService) GetCart(ctx context.Context, req *pb.GetCartRequest) (*pb.GetCartResponse, error) {
-	cartId := req.CartId
-	cartItems, err := c.cartUseCase.GetCart(ctx, cartId)
+	userId := req.UserId
+	cartItems, err := c.cartUseCase.GetCart(ctx, userId)
 	if err != nil {
 		return &pb.GetCartResponse{
 			Status: http.StatusUnprocessableEntity,

@@ -13,7 +13,11 @@ type cartUseCase struct {
 }
 
 // GetCart implements interfaces.CartUseCase
-func (c *cartUseCase) GetCart(ctx context.Context, cartId int64) ([]domain.CartItem, error) {
+func (c *cartUseCase) GetCart(ctx context.Context, userId int64) ([]domain.CartItem, error) {
+	cartId,err:=c.cartRepo.CheckInCartOfUser(ctx,userId)
+	if err!=nil{
+		return []domain.CartItem{},err
+	}
 	cartItems, err := c.cartRepo.GetCart(ctx, cartId)
 	return cartItems, err
 }

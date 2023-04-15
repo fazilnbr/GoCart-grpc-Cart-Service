@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"github.com/fazilnbr/GoCart-grpc-cart-Service/pkg/api/service"
+	"github.com/fazilnbr/GoCart-grpc-cart-Service/pkg/pb"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 )
@@ -23,7 +24,7 @@ func NewGRPCServer(cartService *service.CartService, grpcPort string) {
 
 	grpcServer := grpc.NewServer()
 
-	// pb.RegisterAuthServiceServer(grpcServer, cartService)
+	pb.RegisterCartServiceServer(grpcServer, cartService)
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
@@ -32,7 +33,7 @@ func NewGRPCServer(cartService *service.CartService, grpcPort string) {
 
 func NewServerHTTP(cartService *service.CartService) *ServerHTTP {
 	engine := gin.New()
-	go NewGRPCServer(cartService, "50081")
+	go NewGRPCServer(cartService, "50083")
 	// Use logger from Gin
 	engine.Use(gin.Logger())
 
@@ -40,5 +41,5 @@ func NewServerHTTP(cartService *service.CartService) *ServerHTTP {
 }
 
 func (sh *ServerHTTP) Start() {
-	sh.engine.Run(":8000")
+	sh.engine.Run(":8002")
 }

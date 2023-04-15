@@ -1,9 +1,9 @@
 syntax = "proto3";
-package product;
+package cart;
 
 option go_package = "./pkg/pb";
 
-service ProductService {
+service CartService {
   rpc AddProductToCart(AddProductToCartRequest) returns (AddProductToCartResponse) {}
   rpc RemoveProductFromCart (RemoveProductFromCartRequest) returns (RemoveProductFromCartResponse) {}
   rpc GetCart (GetCartRequest) returns (GetCartResponse) {}
@@ -37,8 +37,7 @@ message RemoveProductFromCartResponse {
 // GetCart
 
 message GetCartRequest {
-    int64 CartId =1 ;
-    int64 Quantity =2 ;
+    int64 userId =1 ;
 }
 
 message GetCartResponse {
