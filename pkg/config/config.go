@@ -6,15 +6,16 @@ import (
 )
 
 type Config struct {
-	DBHost     string `mapstructure:"DB_HOST"`
-	DBName     string `mapstructure:"DB_NAME"`
-	DBCart     string `mapstructure:"DB_CART"`
-	DBPort     string `mapstructure:"DB_PORT"`
-	DBPassword string `mapstructure:"DB_PASSWORD"`
+	DBHost        string `mapstructure:"DB_HOST"`
+	DBName        string `mapstructure:"DB_NAME"`
+	DBCart        string `mapstructure:"DB_CART"`
+	DBPort        string `mapstructure:"DB_PORT"`
+	DBPassword    string `mapstructure:"DB_PASSWORD"`
+	ProductSvcUrl string `mapstructure:"PRODUCT_SVC_URL"`
 }
 
 var envs = []string{
-	"DB_HOST", "DB_NAME", "DB_CART", "DB_PORT", "DB_PASSWORD",
+	"DB_HOST", "DB_NAME", "DB_CART", "DB_PORT", "DB_PASSWORD","PRODUCT_SVC_URL",
 }
 
 func LoadConfig() (Config, error) {
