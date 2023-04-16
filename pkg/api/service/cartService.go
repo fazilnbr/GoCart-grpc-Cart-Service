@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/fazilnbr/GoCart-grpc-cart-Service/pkg/client"
@@ -63,6 +64,13 @@ func (c *CartService) AddProductToCart(ctx context.Context, req *pb.AddProductTo
 
 	product, err := c.productSvc.GetProduct(productId)
 	if err != nil {
+		return &pb.AddProductToCartResponse{
+			Status: http.StatusUnprocessableEntity,
+			Error:  err.Error(),
+		}, err
+	}
+	if product.Stock < req.Quantity {
+		err = errors.New("Out Of Stock")
 		return &pb.AddProductToCartResponse{
 			Status: http.StatusUnprocessableEntity,
 			Error:  err.Error(),
