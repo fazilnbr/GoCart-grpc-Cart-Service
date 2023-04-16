@@ -50,7 +50,7 @@ proto: ## Generate the grpc protoc
 	protoc pkg/pb/*.proto --go_out=plugins=grpc:.
 	# protoc pkg/pb/*.proto --go_out=. --go-grpc_out=.
 protogen:
-
+	export PATH="$PATH:$HOME/protobuf/bin"
 	export GOROOT=/usr/local/go
 	export GOPATH=$HOME/go
 	export GOBIN=$GOPATH/bin

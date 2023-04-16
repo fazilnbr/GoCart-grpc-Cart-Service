@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/fazilnbr/GoCart-grpc-cart-Service/pkg/client"
 	"github.com/fazilnbr/GoCart-grpc-cart-Service/pkg/domain"
 	"github.com/fazilnbr/GoCart-grpc-cart-Service/pkg/pb"
 	usecase "github.com/fazilnbr/GoCart-grpc-cart-Service/pkg/usecase/interface"
@@ -11,6 +12,7 @@ import (
 
 type CartService struct {
 	cartUseCase usecase.CartUseCase
+	productSvc  client.ProductServiceClient
 }
 
 func (c *CartService) GetCart(ctx context.Context, req *pb.GetCartRequest) (*pb.GetCartResponse, error) {
@@ -56,6 +58,17 @@ func (c *CartService) RemoveProductFromCart(ctx context.Context, req *pb.RemoveP
 }
 
 func (c *CartService) AddProductToCart(ctx context.Context, req *pb.AddProductToCartRequest) (*pb.AddProductToCartResponse, error) {
+
+	productId := req.ProductId
+
+	product, err := c.productSvc.GetProduct(productId)
+	if err != nil {
+		return &pb.AddProductToCartResponse{
+			Status: http.StatusUnprocessableEntity,
+			Error:  err.Error(),
+		}, err
+	}
+
 	userId := req.UserId
 
 	id, err := c.cartUseCase.CheckorCreatecart(ctx, userId)
@@ -68,7 +81,7 @@ func (c *CartService) AddProductToCart(ctx context.Context, req *pb.AddProductTo
 
 	AddProduct := domain.CartItem{
 		Cart_id:    id,
-		Product_id: req.ProductId,
+		Product_id: product.Id,
 		Quantity:   req.Quantity,
 	}
 	id, err = c.cartUseCase.AddCartitemForUser(ctx, AddProduct)
@@ -86,8 +99,9 @@ func (c *CartService) AddProductToCart(ctx context.Context, req *pb.AddProductTo
 
 }
 
-func NewCartService(usecase usecase.CartUseCase) *CartService {
+func NewCartService(usecase usecase.CartUseCase, productSvc client.ProductServiceClient) *CartService {
 	return &CartService{
 		cartUseCase: usecase,
+		productSvc:  productSvc,
 	}
 }
